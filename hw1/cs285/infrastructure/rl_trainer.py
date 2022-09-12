@@ -168,7 +168,7 @@ class RL_Trainer(object):
 
         if itr == 0:
             print("\nloading expert training data\n")
-            with open(load_initial_expertdata) as f:
+            with open(load_initial_expertdata, 'rb') as f:
                 loaded_paths = pkl.load(f)
             return loaded_paths, 0, None
 
