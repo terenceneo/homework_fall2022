@@ -89,7 +89,16 @@ class MLPPolicy(BasePolicy, nn.Module, metaclass=abc.ABCMeta):
 
     # update/train this policy
     def update(self, observations, actions, **kwargs):
-        raise NotImplementedError
+        observations = ptu.from_numpy(observations.astype(np.float32))
+        actions = ptu.from_numpy(actions.astype(np.float32))
+        distr = self(observations)
+        loss = -(distr.log_prob(actions)).mean() # todo or sum???
+
+        self.optimizer.zero_grad()
+        loss.backward()
+        self.optimizer.step()
+
+        return loss
 
     # This function defines the forward pass of the network.
     # You can return anything you want, but you should be able to differentiate
