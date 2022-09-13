@@ -127,3 +127,10 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# folders
+hw1/sample_report/*
+hw1/report/*
+hw1/run_logs/*
+hw1/submit.zip
+hw1/GLa21328
