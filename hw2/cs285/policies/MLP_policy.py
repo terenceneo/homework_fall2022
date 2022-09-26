@@ -106,9 +106,7 @@ class MLPPolicy(BasePolicy, nn.Module, metaclass=abc.ABCMeta):
 
         self.optimizer.zero_grad()
         loss.backward()
-        obs, rew, done, info = self.optimizer.step()
-        if done:
-            self.optimizer.reset()
+        self.optimizer.step()
 
         return loss
 
@@ -177,9 +175,7 @@ class MLPPolicyPG(MLPPolicy):
 
             self.baseline_optimizer.zero_grad()
             baseline_loss.backward()
-            obs, rew, done, info = self.baseline_optimizer.step()
-            if done:
-                self.optimizer.reset()
+            self.baseline_optimizer.step()
 
         train_log = {
             'Training Loss': ptu.to_numpy(loss),

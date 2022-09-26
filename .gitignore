@@ -140,3 +140,8 @@ hw2/report/*
 hw2/run_logs/*
 hw2/submit.zip
 hw2/GLa21328
+hw2/data/*
+mujoco200_win64/*
+vs_BuildTools.exe
+pybox2d_dev/
+mujoco-py/
