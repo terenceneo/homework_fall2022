@@ -1,5 +1,6 @@
 import abc
 import itertools
+from typing import Any
 from torch import nn
 from torch.nn import functional as F
 from torch import optim
@@ -39,9 +40,9 @@ class MLPPolicy(BasePolicy, nn.Module, metaclass=abc.ABCMeta):
 
         if self.discrete:
             self.logits_na = ptu.build_mlp(input_size=self.ob_dim,
-                                           output_size=self.ac_dim,
-                                           n_layers=self.n_layers,
-                                           size=self.size)
+                output_size=self.ac_dim,
+                n_layers=self.n_layers,
+                size=self.size)
             self.logits_na.to(ptu.device)
             self.mean_net = None
             self.logstd = None
@@ -50,8 +51,8 @@ class MLPPolicy(BasePolicy, nn.Module, metaclass=abc.ABCMeta):
         else:
             self.logits_na = None
             self.mean_net = ptu.build_mlp(input_size=self.ob_dim,
-                                      output_size=self.ac_dim,
-                                      n_layers=self.n_layers, size=self.size)
+                output_size=self.ac_dim,
+                n_layers=self.n_layers, size=self.size)
             self.logstd = nn.Parameter(
                 torch.zeros(self.ac_dim, dtype=torch.float32, device=ptu.device)
             )
@@ -86,18 +87,37 @@ class MLPPolicy(BasePolicy, nn.Module, metaclass=abc.ABCMeta):
 
     # query the policy with observation(s) to get selected action(s)
     def get_action(self, obs: np.ndarray) -> np.ndarray:
-        # TODO: get this from HW1
+        if len(obs.shape) > 1:
+            observation = obs
+        else:
+            observation = obs[None]
+
+        observation = ptu.from_numpy(observation)
+        action_distribution = self(observation)
+        action = action_distribution.sample()  # don't bother with rsample
+        return ptu.to_numpy(action)
 
     # update/train this policy
     def update(self, observations, actions, **kwargs):
-        raise NotImplementedError
+        observations = ptu.from_numpy(observations.astype(np.float32))
+        actions = ptu.from_numpy(actions.astype(np.float32))
+        distr = self(observations)
+        loss = -(distr.log_prob(actions)).mean() # todo or sum???
+
+        self.optimizer.zero_grad()
+        loss.backward()
+        obs, rew, done, info = self.optimizer.step()
+        if done:
+            self.optimizer.reset()
+
+        return loss
 
     # This function defines the forward pass of the network.
     # You can return anything you want, but you should be able to differentiate
     # through it. For example, you can return a torch.FloatTensor. You can also
     # return more flexible objects, such as a
     # `torch.distributions.Distribution` object. It's up to you!
-    def forward(self, observation: torch.FloatTensor):
+    def forward(self, observation: torch.FloatTensor) -> Any:
         if self.discrete:
             logits = self.logits_na(observation)
             action_distribution = distributions.Categorical(logits=logits)
@@ -127,24 +147,39 @@ class MLPPolicyPG(MLPPolicy):
         actions = ptu.from_numpy(actions)
         advantages = ptu.from_numpy(advantages)
 
-        # TODO: update the policy using policy gradient
+        # Done: update the policy using policy gradient
         # HINT1: Recall that the expression that we want to MAXIMIZE
             # is the expectation over collected trajectories of:
             # sum_{t=0}^{T-1} [grad [log pi(a_t|s_t) * (Q_t - b_t)]]
         # HINT2: you will want to use the `log_prob` method on the distribution returned
             # by the `forward` method
 
-        TODO
+        dist = self.forward(observations)
+        loss = - torch.mean(dist.log_prob(actions) * advantages) # use mean instead of sum
+        self.optimizer.zero_grad()
+        loss.backward()
 
         if self.nn_baseline:
-            ## TODO: update the neural network baseline using the q_values as
+            ## Done: update the neural network baseline using the q_values as
             ## targets. The q_values should first be normalized to have a mean
             ## of zero and a standard deviation of one.
 
             ## Note: You will need to convert the targets into a tensor using
                 ## ptu.from_numpy before using it in the loss
 
-            TODO
+            ## The q_values should first be normalized to have a mean
+            ## of zero and a standard deviation of one
+            q_values = (q_values - np.mean(q_values)) / (1e-8 + np.std(q_values))
+            q_values = ptu.from_numpy(q_values)
+
+            preds = self.baseline(observations)
+            baseline_loss = self.baseline_loss(preds, q_values)
+
+            self.baseline_optimizer.zero_grad()
+            baseline_loss.backward()
+            obs, rew, done, info = self.baseline_optimizer.step()
+            if done:
+                self.optimizer.reset()
 
         train_log = {
             'Training Loss': ptu.to_numpy(loss),
