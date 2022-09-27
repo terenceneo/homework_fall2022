@@ -42,41 +42,59 @@
 # # --ep_len 1000 --discount 0.9 -n 100 -l 2 -s 64 -b 149 -lr 0.05 -rtg \
 # # --exp_name q2_b<b*>_r<r*>
 
-# Experiment 4
-echo running experiment 4...
+# # Experiment 4
+# echo running experiment 4...
+
+# python cs285/scripts/run_hw2.py --env_name HalfCheetah-v4 --ep_len 150 \
+# --discount 0.95 -n 100 -l 2 -s 32 -b 50000 -lr 0.02 -rtg --nn_baseline \
+# --exp_name q4_search_b50000_lr0.02_rtg_nnbaseline
+
+# # Experiment 5
+# echo running experiment 5...
+
+# python cs285/scripts/run_hw2.py \
+# --env_name Hopper-v2 --ep_len 1000 \
+# --discount 0.99 -n 300 -l 2 -s 32 -b 2000 -lr 0.001 \
+# --reward_to_go --nn_baseline --action_noise_std 0.5 --gae_lambda 0 \
+# --exp_name q5_b2000_r0.001_lambda0
+
+# python cs285/scripts/run_hw2.py \
+# --env_name Hopper-v2 --ep_len 1000 \
+# --discount 0.99 -n 300 -l 2 -s 32 -b 2000 -lr 0.001 \
+# --reward_to_go --nn_baseline --action_noise_std 0.5 --gae_lambda 0.95 \
+# --exp_name q5_b2000_r0.001_lambda0.95
+
+# python cs285/scripts/run_hw2.py \
+# --env_name Hopper-v2 --ep_len 1000 \
+# --discount 0.99 -n 300 -l 2 -s 32 -b 2000 -lr 0.001 \
+# --reward_to_go --nn_baseline --action_noise_std 0.5 --gae_lambda 0.99 \
+# --exp_name q5_b2000_r0.001_lambda0.99
+
+# python cs285/scripts/run_hw2.py \
+# --env_name Hopper-v2 --ep_len 1000 \
+# --discount 0.99 -n 300 -l 2 -s 32 -b 2000 -lr 0.001 \
+# --reward_to_go --nn_baseline --action_noise_std 0.5 --gae_lambda 1 \
+# --exp_name q5_b2000_r0.001_lambda1
+
+# HalfCheetah with optimal values -b 50000 -lr 0.02
+echo running experiment 4 HalfCheetah with optimal values -b 50000 -lr 0.02...
+# python cs285/scripts/run_hw2.py --env_name HalfCheetah-v4 --ep_len 150 \
+# --discount 0.95 -n 100 -l 2 -s 32 -b 50000 -lr 0.02 \
+# --exp_name q4_b50000_r0.02
+
+python cs285/scripts/run_hw2.py --env_name HalfCheetah-v4 --ep_len 150 \
+--discount 0.95 -n 100 -l 2 -s 32 -b 50000 -lr 0.02 -rtg \
+--exp_name q4_b50000_r0.02_rtg
+
+python cs285/scripts/run_hw2.py --env_name HalfCheetah-v4 --ep_len 150 \
+--discount 0.95 -n 100 -l 2 -s 32 -b 50000 -lr 0.02 --nn_baseline \
+--exp_name q4_b50000_r0.02_nnbaseline
 
 python cs285/scripts/run_hw2.py --env_name HalfCheetah-v4 --ep_len 150 \
 --discount 0.95 -n 100 -l 2 -s 32 -b 50000 -lr 0.02 -rtg --nn_baseline \
---exp_name q4_search_b50000_lr0.02_rtg_nnbaseline
+--exp_name q4_b50000_r0.02_rtg_nnbaseline
 
-# Experiment 5
-echo running experiment 5...
-
-python cs285/scripts/run_hw2.py \
---env_name Hopper-v2 --ep_len 1000 \
---discount 0.99 -n 300 -l 2 -s 32 -b 2000 -lr 0.001 \
---reward_to_go --nn_baseline --action_noise_std 0.5 --gae_lambda 0 \
---exp_name q5_b2000_r0.001_lambda0
-
-python cs285/scripts/run_hw2.py \
---env_name Hopper-v2 --ep_len 1000 \
---discount 0.99 -n 300 -l 2 -s 32 -b 2000 -lr 0.001 \
---reward_to_go --nn_baseline --action_noise_std 0.5 --gae_lambda 0.95 \
---exp_name q5_b2000_r0.001_lambda0.95
-
-python cs285/scripts/run_hw2.py \
---env_name Hopper-v2 --ep_len 1000 \
---discount 0.99 -n 300 -l 2 -s 32 -b 2000 -lr 0.001 \
---reward_to_go --nn_baseline --action_noise_std 0.5 --gae_lambda 0.99 \
---exp_name q5_b2000_r0.001_lambda0.99
-
-python cs285/scripts/run_hw2.py \
---env_name Hopper-v2 --ep_len 1000 \
---discount 0.99 -n 300 -l 2 -s 32 -b 2000 -lr 0.001 \
---reward_to_go --nn_baseline --action_noise_std 0.5 --gae_lambda 1 \
---exp_name q5_b2000_r0.001_lambda1
-
-# # Experiment 3
+# Experiment 3
 echo running experiment 3...
 
 python cs285/scripts/run_hw2.py \
@@ -121,21 +139,3 @@ python cs285/scripts/run_hw2.py --env_name HalfCheetah-v4 --ep_len 150 \
 python cs285/scripts/run_hw2.py --env_name HalfCheetah-v4 --ep_len 150 \
 --discount 0.95 -n 100 -l 2 -s 32 -b 50000 -lr 0.01 -rtg --nn_baseline \
 --exp_name q4_search_b50000_lr0.01_rtg_nnbaseline
-
-# # HalfCheetah with optimal values
-# echo HalfCheetah with optimal values
-# python cs285/scripts/run_hw2.py --env_name HalfCheetah-v4 --ep_len 150 \
-# --discount 0.95 -n 100 -l 2 -s 32 -b <b*> -lr <r*> \
-# --exp_name q4_b<b*>_r<r*>
-
-# python cs285/scripts/run_hw2.py --env_name HalfCheetah-v4 --ep_len 150 \
-# --discount 0.95 -n 100 -l 2 -s 32 -b <b*> -lr <r*> -rtg \
-# --exp_name q4_b<b*>_r<r*>_rtg
-
-# python cs285/scripts/run_hw2.py --env_name HalfCheetah-v4 --ep_len 150 \
-# --discount 0.95 -n 100 -l 2 -s 32 -b <b*> -lr <r*> --nn_baseline \
-# --exp_name q4_b<b*>_r<r*>_nnbaseline
-
-# python cs285/scripts/run_hw2.py --env_name HalfCheetah-v4 --ep_len 150 \
-# --discount 0.95 -n 100 -l 2 -s 32 -b <b*> -lr <r*> -rtg --nn_baseline \
-# --exp_name q4_b<b*>_r<r*>_rtg_nnbaseline
