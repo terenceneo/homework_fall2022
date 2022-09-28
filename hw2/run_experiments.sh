@@ -1,9 +1,9 @@
 # # Experiment 1
 # echo running experiment 1...
 
-# echo running q1_sb_no_rtg_dsa...
-# python cs285/scripts/run_hw2.py --env_name CartPole-v0 -n 100 -b 1000 \
-# -dsa --exp_name q1_sb_no_rtg_dsa
+echo running q1_sb_no_rtg_dsa...
+python cs285/scripts/run_hw2.py --env_name CartPole-v0 -n 100 -b 1000 \
+-dsa --exp_name q1_sb_no_rtg_dsa
 
 # echo running q1_sb_rtg_dsa... 
 # python cs285/scripts/run_hw2.py --env_name CartPole-v0 -n 100 -b 1000 \
@@ -76,19 +76,19 @@
 # --reward_to_go --nn_baseline --action_noise_std 0.5 --gae_lambda 1 \
 # --exp_name q5_b2000_r0.001_lambda1
 
-# Experiment 3
-echo running experiment 3...
+# # Experiment 3
+# echo running experiment 3...
 
-python cs285/scripts/run_hw2.py \
---env_name LunarLanderContinuous-v2 --ep_len 1000 \
---discount 0.99 -n 100 -l 2 -s 64 -b 40000 -lr 0.005 \
---reward_to_go --nn_baseline --exp_name q3_b40000_r0.005
+# python cs285/scripts/run_hw2.py \
+# --env_name LunarLanderContinuous-v2 --ep_len 1000 \
+# --discount 0.99 -n 100 -l 2 -s 64 -b 40000 -lr 0.005 \
+# --reward_to_go --nn_baseline --exp_name q3_b40000_r0.005
 
 # HalfCheetah with optimal values -b 50000 -lr 0.02
 echo running experiment 4 HalfCheetah with optimal values -b 50000 -lr 0.02...
-# python cs285/scripts/run_hw2.py --env_name HalfCheetah-v4 --ep_len 150 \
-# --discount 0.95 -n 100 -l 2 -s 32 -b 50000 -lr 0.02 \
-# --exp_name q4_b50000_r0.02
+python cs285/scripts/run_hw2.py --env_name HalfCheetah-v4 --ep_len 150 \
+--discount 0.95 -n 100 -l 2 -s 32 -b 50000 -lr 0.02 \
+--exp_name q4_b50000_r0.02
 
 # python cs285/scripts/run_hw2.py --env_name HalfCheetah-v4 --ep_len 150 \
 # --discount 0.95 -n 100 -l 2 -s 32 -b 50000 -lr 0.02 -rtg \
